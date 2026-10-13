@@ -14,6 +14,7 @@ def inspect_tls(target_url: str, timeout: float = 5.0) -> list[Finding]:
         return []
     findings: list[Finding] = []
     ctx = ssl.create_default_context()
+    ctx.minimum_version = ssl.TLSVersion.TLSv1_2
     try:
         address = (parsed.hostname, parsed.port or 443)
         with socket.create_connection(address, timeout=timeout) as sock:
