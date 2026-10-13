@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SentinelScan Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem; }
+    .card { background: #111827; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; border: 1px solid #1f2937; }
+    .sev-critical { color: #ef4444; }
+    .sev-high { color: #f97316; }
+    .sev-medium { color: #f59e0b; }
+    .sev-low { color: #22c55e; }
+    .sev-informational { color: #38bdf8; }
+    code { background: #1f2937; padding: 0.15rem 0.3rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>SentinelScan</h1>
+  <div class="card">
+    <p><strong>Target:</strong> {{ result.metadata.target_url }}</p>
+    <p><strong>Started:</strong> {{ result.metadata.started_at }}</p>
+    <p><strong>Finished:</strong> {{ result.metadata.finished_at }}</p>
+    <p><strong>Scope:</strong> {{ result.metadata.scope_hosts | join(', ') }}</p>
+    <p><strong>Scanner Version:</strong> {{ result.metadata.scanner_version }}</p>
+  </div>
+
+  <div class="card">
+    <h2>Findings ({{ result.findings|length }})</h2>
+    {% for finding in result.findings %}
+      <div class="card">
+        <h3 class="sev-{{ finding.severity.value }}">{{ finding.title | e }}</h3>
+        <p><strong>Severity:</strong> {{ finding.severity.value }}</p>
+        <p><strong>Confidence:</strong> {{ finding.confidence.value }}</p>
+        <p><strong>Category:</strong> {{ finding.category | e }}</p>
+        <p><strong>Description:</strong> {{ finding.description | e }}</p>
+        <p><strong>Evidence:</strong> <code>{{ finding.evidence | e }}</code></p>
+        <p><strong>Remediation:</strong> {{ finding.remediation | e }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
